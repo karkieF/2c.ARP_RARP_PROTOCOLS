@@ -17,9 +17,49 @@ stored.
 5. Map the IP address with its MAC address and return the MAC address to client.
 P
 ## PROGRAM - ARP
-## OUPUT - ARP
-## PROGRAM - RARP
-## OUPUT -RARP
+#server.py:
+```
+import socket
+s = socket.socket()
+s.bind(('localhost', 8000))
+s.listen(1)
+print("Waiting for connection...")
+conn, addr = s.accept()
+print("Connected to", addr)
+while True:
+ data = conn.recv(1024).decode()
+ if not data:
+  break
+ print("Frames received:", data)
+ ack = "ACK for " + data
+ conn.send(ack.encode())
+conn.close()
+```
+#client.py:
+```
+import socket
+s = socket.socket()
+s.connect(('localhost', 8000))
+n = int(input("Enter number of frames: "))
+w = int(input("Enter window size: "))
+frames = list(range(1, n+1))
+i = 0
+while i < n:
+ send_frames = frames[i:i+w]
+ msg = " ".join(map(str, send_frames))
+ print("Sending frames:", msg)
+ s.send(msg.encode())
+ ack = s.recv(1024).decode()
+ print("Received:", ack)
+ i += w
+s.close()
+```
+## OUTPUT:
+#server.py:
+<img width="345" height="108" alt="image" src="https://github.com/user-attachments/assets/e1789625-461a-45e3-bcec-8a9b06234ec2" />
+#client.py:
+<img width="261" height="172" alt="image" src="https://github.com/user-attachments/assets/f903ec8f-4d2c-4d1f-804e-6667065e9063" />
+
 ## RESULT
 Thus, the python program for simulating ARP protocols using TCP was successfully 
 executed.
