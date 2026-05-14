@@ -55,8 +55,10 @@ while i < n:
 s.close()
 ```
 ## OUTPUT:
+
 #server.py:
 <img width="345" height="108" alt="image" src="https://github.com/user-attachments/assets/e1789625-461a-45e3-bcec-8a9b06234ec2" />
+
 #client.py:
 <img width="261" height="172" alt="image" src="https://github.com/user-attachments/assets/f903ec8f-4d2c-4d1f-804e-6667065e9063" />
 
