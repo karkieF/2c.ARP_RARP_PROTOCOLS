@@ -131,7 +131,7 @@ finally:
 ## OUTPUT:
 
 ### arp_client.py:
-<img width="289" height="51" alt="image" src="https://github.com/user-attachments/assets/e7baa355-e55c-4425-94d0-ef2d24f61c0f" />
+<img width="393" height="40" alt="image" src="https://github.com/user-attachments/assets/1bceba5c-d9a4-4137-ae35-bf1a6623f479" />
 
 ### rarp_client.py:
 <img width="330" height="43" alt="image" src="https://github.com/user-attachments/assets/7658e82e-45ec-4e75-8e9b-754a3836f073" />
