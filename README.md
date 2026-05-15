@@ -17,51 +17,124 @@ stored.
 5. Map the IP address with its MAC address and return the MAC address to client.
 P
 ## PROGRAM - ARP
-#server.py:
+### arp_server.py:
 ```
 import socket
+
 s = socket.socket()
+
 s.bind(('localhost', 8000))
 s.listen(1)
-print("Waiting for connection...")
+print("ARP Server waiting on localhost:8000...")
+
 conn, addr = s.accept()
 print("Connected to", addr)
-while True:
- data = conn.recv(1024).decode()
- if not data:
-  break
- print("Frames received:", data)
- ack = "ACK for " + data
- conn.send(ack.encode())
-conn.close()
+
+address = {
+    "165.165.80.80": "6A:08:AA:C2",
+    "165.165.79.1": "8A:BC:E3:FA"
+}
+
+try:
+    while True:
+        ip = conn.recv(1024).decode()
+        if not ip:
+            break
+
+        try:
+            conn.send(address[ip].encode())
+        except KeyError:
+            conn.send("Not Found".encode())
+finally:
+    conn.close()
+    s.close()
 ```
-#client.py:
+### arp_client.py:
 ```
 import socket
+
 s = socket.socket()
-s.connect(('localhost', 8000))
-n = int(input("Enter number of frames: "))
-w = int(input("Enter window size: "))
-frames = list(range(1, n+1))
-i = 0
-while i < n:
- send_frames = frames[i:i+w]
- msg = " ".join(map(str, send_frames))
- print("Sending frames:", msg)
- s.send(msg.encode())
- ack = s.recv(1024).decode()
- print("Received:", ack)
- i += w
-s.close()
+
+try:
+    s.connect(('localhost', 8000))
+except ConnectionRefusedError:
+    print("Connection refused: start arp_server.py first.")
+    raise
+
+try:
+    while True:
+        ip = input("Enter Logical Address (IP): ")
+        if not ip:
+            break
+
+        s.send(ip.encode())
+        print("MAC Address:", s.recv(1024).decode())
+finally:
+    s.close()
+```
+### rarp_client.py:
+```
+import socket
+
+s = socket.socket()
+
+try:
+    s.connect(('localhost', 9000))
+except ConnectionRefusedError:
+    print("Connection refused: start rarp_server.py first.")
+    raise
+
+try:
+    while True:
+        mac = input("Enter MAC Address: ")
+        if not mac:
+            break
+
+        s.sendall(mac.encode())
+        print("Logical Address:", s.recv(1024).decode())
+finally:
+    s.close()
+```
+### rarp_server.py:
+```
+import socket
+
+s = socket.socket()
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+s.bind(('localhost', 9000))
+s.listen(1)
+print("RARP Server waiting on localhost:9000...")
+
+conn, addr = s.accept()
+print("Connected to", addr)
+
+address = {
+    "6A:08:AA:C2": "192.168.1.100",
+    "8A:BC:E3:FA": "192.168.1.99"
+}
+
+try:
+    while True:
+        mac = conn.recv(1024).decode()
+        if not mac:
+            break
+
+        try:
+            conn.sendall(address[mac].encode())
+        except KeyError:
+            conn.sendall("Not Found".encode())
+finally:
+    conn.close()
+    s.close()
 ```
 ## OUTPUT:
 
-#server.py:
-<img width="345" height="108" alt="image" src="https://github.com/user-attachments/assets/e1789625-461a-45e3-bcec-8a9b06234ec2" />
+### arp_client.py:
+<img width="289" height="51" alt="image" src="https://github.com/user-attachments/assets/e7baa355-e55c-4425-94d0-ef2d24f61c0f" />
 
-#client.py:
-<img width="261" height="172" alt="image" src="https://github.com/user-attachments/assets/f903ec8f-4d2c-4d1f-804e-6667065e9063" />
-
+### rarp_client.py:
+<img width="287" height="43" alt="image" src="https://github.com/user-attachments/assets/7359aa6b-0057-48c8-a8da-d1c6829436b5" />
 ## RESULT
 Thus, the python program for simulating ARP protocols using TCP was successfully 
 executed.
