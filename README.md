@@ -134,7 +134,8 @@ finally:
 <img width="289" height="51" alt="image" src="https://github.com/user-attachments/assets/e7baa355-e55c-4425-94d0-ef2d24f61c0f" />
 
 ### rarp_client.py:
-<img width="287" height="43" alt="image" src="https://github.com/user-attachments/assets/7359aa6b-0057-48c8-a8da-d1c6829436b5" />
+<img width="330" height="43" alt="image" src="https://github.com/user-attachments/assets/7658e82e-45ec-4e75-8e9b-754a3836f073" />
+
 ## RESULT
 Thus, the python program for simulating ARP protocols using TCP was successfully 
 executed.
